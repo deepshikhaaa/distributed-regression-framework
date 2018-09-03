@@ -157,11 +157,6 @@
       key_options: 'from="127.0.0.1"'
     name: Add authorized_key for georep tests
 
-  - name: Run the test server script
-    shell: nohup ./distributed-test-runner.py --server &
-    args:
-      chdir: /srv/glusterfs/extras/distributed-testing
-
   - name: Create directory for storing the logs
     file:
       path: '/tmp/failed-tests'
