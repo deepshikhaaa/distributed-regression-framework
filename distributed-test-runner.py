@@ -30,7 +30,6 @@ SSH_TIMEOUT_S = 10
 MAX_ATTEMPTS = 3
 ADDRESS_FAMILY = 'IPv4'
 
-
 def socket_instance(address_family):
     if address_family.upper() == 'ipv4'.upper():
         return socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -39,7 +38,6 @@ def socket_instance(address_family):
     else:
         Log.error("Invalid IP address family")
         sys.exit(1)
-
 
 def patch_file():
     return "/tmp/%s-patch.tar.gz" % PATCH_FILE_UID
@@ -125,12 +123,10 @@ def failsafe(fn, args=()):
         Log.debug(str(err))
     return (False, None)
 
-
 class LogLevel:
     DEBUG = 2
     ERROR = 1
     CLI = 0
-
 
 class Log:
     LOGLEVEL = LogLevel.ERROR
@@ -156,7 +152,6 @@ class Log:
     @staticmethod
     def cli(msg):
         sys.stderr.write("%s\n" % msg)
-
 
 class Shell:
     def __init__(self, cwd=None, logpath=None):
@@ -225,7 +220,6 @@ class Shell:
         Log.debug("return %s" % status)
         return status
 
-
 # ..............................................................................
 # Server role
 # ..............................................................................
@@ -266,6 +260,7 @@ class TestServer:
             Log.error("Another process instance is running")
             sys.exit(0)
 
+
 #
 # Server Handler
 #
@@ -292,7 +287,6 @@ def synchronized(func):
             handler_serving_since.reset()
 
     return decorator
-
 
 class Handlers:
     def __init__(self, scratchdir):
@@ -340,47 +334,6 @@ class Handlers:
         self.shell.cd(self.gluster_root)
         self.shell.check_call("PATH=.:$PATH; sudo ./clean_gfs_devserver.sh")
         return True
-
-    @synchronized
-    def copy(self, id, name, content):
-        with open("%s/%s" % (self.scratchdir, name), "w+") as f:
-            f.write(decode(content))
-        return True
-
-    @synchronized
-    def copygzip(self, id, content):
-        assert id == self.client_id
-        gzipfile = "%s/tmp.tar.gz" % self.scratchdir
-        tarfile = "%s/tmp.tar" % self.scratchdir
-        self.shell.check_call("rm -f %s" % gzipfile)
-        self.shell.check_call("rm -f %s" % tarfile)
-        write_to_file(gzipfile, decode(content))
-
-        self.shell.cd(self.scratchdir)
-        self.shell.check_call("rm -r -f %s" % self.gluster_root)
-        self.shell.check_call("mkdir -p %s" % self.gluster_root)
-
-        self.shell.cd(self.gluster_root)
-        cmds = [
-            "gunzip -f -q %s" % gzipfile,
-            "tar -xvf %s" % tarfile
-        ]
-        return self.shell.call(cmds) == 0
-
-    @synchronized
-    def build(self, id, asan=False):
-        assert id == self.client_id
-        self.shell.cd(self.gluster_root)
-        self.shell.call("make clean")
-        env = "ASAN_ENABLED=1" if asan else ""
-        return self.shell.call(
-		"%s ./extras/distributed-testing/distributed-test-build.sh" % env) == 0
-
-    @synchronized
-    def install(self, id):
-        assert id == self.client_id
-        self.shell.cd(self.gluster_root)
-        return self.shell.call("make install") == 0
 
     @synchronized
     def prove(self, id, test, timeout, valgrind=False, asan_noleaks=True):
@@ -439,18 +392,7 @@ class RPCConnection((threading.Thread)):
     def ping(self):
         return self.proxy.ping()
 
-    def init(self):
-        return self._copy() and self._compile_and_install()
-
     def run(self):
-        (status, ret) = failsafe(self.init)
-        if not status:
-            self.cb.note_lost_connection(self)
-            return
-        elif not ret:
-            self.cb.note_setup_failed(self)
-            return
-
         while not self.stop:
             (status, ret) = failsafe(self._run)
             if not status or not ret:
@@ -482,22 +424,6 @@ class RPCConnection((threading.Thread)):
             self.cb.note_done(test)
         else:
             self.cb.note_error(test, error)
-
-    def _compile_and_install(self):
-        Log.debug("<%s> Build " % self.logid)
-        asan = self.cb.asan or self.cb.asan_noleaks
-        return (self.proxy.build(self.cb.id, asan) and
-                self.proxy.install(self.cb.id))
-
-    def _copy(self):
-        return self._copy_gzip()
-
-    def _copy_gzip(self):
-        Log.cli("<%s> copying and compiling %s to remote" %
-                 (self.logid, self.path))
-        data = encode(get_file_content(patch_file()))
-        Log.debug("GZIP size = %s B" % len(data))
-        return self.proxy.copygzip(self.cb.id, data)
 
 
 class RPCConnectionPool:
