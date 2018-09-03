@@ -1,0 +1,1 @@
+../../../rpc/xdr/src/rpc-common-xdr.x

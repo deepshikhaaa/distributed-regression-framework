@@ -1,0 +1,8 @@
+xdr_sizeof.lo: ../../../contrib/sunrpc/xdr_sizeof.c \
+ /usr/include/stdc-predef.h ../../../config.h ../../../site.h
+
+/usr/include/stdc-predef.h:
+
+../../../config.h:
+
+../../../site.h:

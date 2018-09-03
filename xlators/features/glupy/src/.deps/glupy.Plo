@@ -1,0 +1,639 @@
+glupy.lo: glupy.c /usr/include/stdc-predef.h ../../../../config.h \
+ ../../../../site.h /usr/include/ctype.h /usr/include/features.h \
+ /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+ /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
+ /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+ /usr/include/endian.h /usr/include/bits/endian.h \
+ /usr/include/bits/byteswap.h /usr/include/bits/byteswap-16.h \
+ /usr/include/xlocale.h /usr/include/dlfcn.h \
+ /usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stddef.h \
+ /usr/include/bits/dlfcn.h /usr/include/sys/uio.h \
+ /usr/include/sys/types.h /usr/include/time.h /usr/include/sys/select.h \
+ /usr/include/bits/select.h /usr/include/bits/sigset.h \
+ /usr/include/bits/time.h /usr/include/sys/sysmacros.h \
+ /usr/include/bits/pthreadtypes.h /usr/include/bits/uio.h \
+ /usr/include/python2.7/Python.h /usr/include/python2.7/patchlevel.h \
+ /usr/include/python2.7/pyconfig.h /usr/include/python2.7/pyconfig-64.h \
+ /usr/include/python2.7/pymacconfig.h \
+ /usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/limits.h \
+ /usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/syslimits.h \
+ /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+ /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+ /usr/include/bits/posix2_lim.h /usr/include/bits/xopen_lim.h \
+ /usr/include/bits/stdio_lim.h /usr/include/stdio.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stdarg.h \
+ /usr/include/bits/sys_errlist.h /usr/include/string.h \
+ /usr/include/errno.h /usr/include/bits/errno.h \
+ /usr/include/linux/errno.h /usr/include/asm/errno.h \
+ /usr/include/asm-generic/errno.h /usr/include/asm-generic/errno-base.h \
+ /usr/include/stdlib.h /usr/include/bits/waitflags.h \
+ /usr/include/bits/waitstatus.h /usr/include/alloca.h \
+ /usr/include/bits/stdlib-float.h /usr/include/unistd.h \
+ /usr/include/bits/posix_opt.h /usr/include/bits/environments.h \
+ /usr/include/bits/confname.h /usr/include/getopt.h /usr/include/assert.h \
+ /usr/include/python2.7/pyport.h /usr/include/inttypes.h \
+ /usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stdint.h \
+ /usr/include/stdint.h /usr/include/bits/wchar.h /usr/include/math.h \
+ /usr/include/bits/math-vector.h /usr/include/bits/libm-simd-decl-stubs.h \
+ /usr/include/bits/huge_val.h /usr/include/bits/huge_valf.h \
+ /usr/include/bits/huge_vall.h /usr/include/bits/inf.h \
+ /usr/include/bits/nan.h /usr/include/bits/mathdef.h \
+ /usr/include/bits/mathcalls.h /usr/include/sys/time.h \
+ /usr/include/bits/timex.h /usr/include/sys/stat.h \
+ /usr/include/bits/stat.h /usr/include/python2.7/pymath.h \
+ /usr/include/python2.7/pymem.h /usr/include/python2.7/object.h \
+ /usr/include/python2.7/objimpl.h /usr/include/python2.7/pydebug.h \
+ /usr/include/python2.7/unicodeobject.h \
+ /usr/include/python2.7/intobject.h /usr/include/python2.7/boolobject.h \
+ /usr/include/python2.7/longobject.h /usr/include/python2.7/floatobject.h \
+ /usr/include/python2.7/complexobject.h \
+ /usr/include/python2.7/rangeobject.h \
+ /usr/include/python2.7/stringobject.h \
+ /usr/include/python2.7/memoryobject.h \
+ /usr/include/python2.7/bufferobject.h \
+ /usr/include/python2.7/bytesobject.h \
+ /usr/include/python2.7/bytearrayobject.h \
+ /usr/include/python2.7/tupleobject.h /usr/include/python2.7/listobject.h \
+ /usr/include/python2.7/dictobject.h /usr/include/python2.7/enumobject.h \
+ /usr/include/python2.7/setobject.h /usr/include/python2.7/methodobject.h \
+ /usr/include/python2.7/moduleobject.h \
+ /usr/include/python2.7/funcobject.h /usr/include/python2.7/classobject.h \
+ /usr/include/python2.7/fileobject.h /usr/include/python2.7/cobject.h \
+ /usr/include/python2.7/pycapsule.h /usr/include/python2.7/traceback.h \
+ /usr/include/python2.7/sliceobject.h /usr/include/python2.7/cellobject.h \
+ /usr/include/python2.7/iterobject.h /usr/include/python2.7/genobject.h \
+ /usr/include/python2.7/descrobject.h /usr/include/python2.7/warnings.h \
+ /usr/include/python2.7/weakrefobject.h /usr/include/python2.7/codecs.h \
+ /usr/include/python2.7/pyerrors.h /usr/include/python2.7/pystate.h \
+ /usr/include/python2.7/pyarena.h /usr/include/python2.7/modsupport.h \
+ /usr/include/python2.7/pythonrun.h /usr/include/python2.7/ceval.h \
+ /usr/include/python2.7/sysmodule.h /usr/include/python2.7/intrcheck.h \
+ /usr/include/python2.7/import.h /usr/include/python2.7/abstract.h \
+ /usr/include/python2.7/compile.h /usr/include/python2.7/code.h \
+ /usr/include/python2.7/eval.h /usr/include/python2.7/pyctype.h \
+ /usr/include/python2.7/pystrtod.h /usr/include/python2.7/pystrcmp.h \
+ /usr/include/python2.7/dtoa.h /usr/include/python2.7/pyfpe.h \
+ ../../../../libglusterfs/src/glusterfs.h /usr/include/netinet/in.h \
+ /usr/include/sys/socket.h /usr/include/bits/socket.h \
+ /usr/include/bits/socket_type.h /usr/include/bits/sockaddr.h \
+ /usr/include/asm/socket.h /usr/include/asm-generic/socket.h \
+ /usr/include/asm/sockios.h /usr/include/asm-generic/sockios.h \
+ /usr/include/bits/in.h /usr/include/sys/statvfs.h \
+ /usr/include/bits/statvfs.h /usr/include/netdb.h \
+ /usr/include/rpc/netdb.h /usr/include/bits/siginfo.h \
+ /usr/include/bits/netdb.h /usr/include/dirent.h \
+ /usr/include/bits/dirent.h /usr/include/fcntl.h \
+ /usr/include/bits/fcntl.h /usr/include/bits/fcntl-linux.h \
+ /usr/include/arpa/inet.h /usr/include/sys/poll.h \
+ /usr/include/bits/poll.h /usr/include/pthread.h /usr/include/sched.h \
+ /usr/include/bits/sched.h /usr/include/bits/setjmp.h \
+ /usr/include/openssl/sha.h /usr/include/openssl/e_os2.h \
+ /usr/include/openssl/opensslconf.h \
+ /usr/include/openssl/opensslconf-x86_64.h \
+ ../../../../rpc/xdr/src/glusterfs-fops.h /usr/include/rpc/rpc.h \
+ /usr/include/rpc/types.h /usr/include/sys/param.h /usr/include/signal.h \
+ /usr/include/bits/signum.h /usr/include/bits/sigaction.h \
+ /usr/include/bits/sigcontext.h /usr/include/bits/sigstack.h \
+ /usr/include/sys/ucontext.h /usr/include/bits/sigthread.h \
+ /usr/include/bits/param.h /usr/include/linux/param.h \
+ /usr/include/asm/param.h /usr/include/asm-generic/param.h \
+ /usr/include/rpc/xdr.h /usr/include/rpc/auth.h /usr/include/rpc/clnt.h \
+ /usr/include/sys/un.h /usr/include/rpc/rpc_msg.h \
+ /usr/include/rpc/auth_unix.h /usr/include/rpc/auth_des.h \
+ /usr/include/rpc/svc.h /usr/include/rpc/svc_auth.h \
+ ../../../../libglusterfs/src/compat.h /usr/include/sys/xattr.h \
+ /usr/include/linux/xattr.h /usr/include/linux/libc-compat.h \
+ /usr/include/linux/falloc.h /usr/include/argp.h \
+ ../../../../libglusterfs/src/list.h \
+ ../../../../libglusterfs/src/locking.h \
+ ../../../../libglusterfs/src/logging.h \
+ ../../../../libglusterfs/src/lkowner.h \
+ ../../../../libglusterfs/src/compat-uuid.h /usr/include/uuid/uuid.h \
+ ../../../../libglusterfs/src/refcount.h \
+ ../../../../libglusterfs/src/atomic.h \
+ /usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stdbool.h \
+ ../../../../libglusterfs/src/xlator.h \
+ ../../../../libglusterfs/src/event-history.h \
+ ../../../../libglusterfs/src/mem-types.h \
+ ../../../../libglusterfs/src/circ-buff.h \
+ ../../../../libglusterfs/src/common-utils.h /usr/include/openssl/md5.h \
+ /usr/include/fnmatch.h ../../../../libglusterfs/src/glusterfs.h \
+ ../../../../libglusterfs/src/mem-pool.h \
+ ../../../../libglusterfs/src/iatt.h \
+ ../../../../libglusterfs/src/compat.h \
+ ../../../../libglusterfs/src/libglusterfs-messages.h \
+ ../../../../libglusterfs/src/glfs-message-id.h \
+ ../../../../libglusterfs/src/protocol-common.h \
+ ../../../../libglusterfs/src/iobuf.h /usr/include/sys/mman.h \
+ /usr/include/bits/mman.h /usr/include/bits/mman-linux.h \
+ ../../../../libglusterfs/src/dict.h \
+ ../../../../libglusterfs/src/latency.h \
+ ../../../../libglusterfs/src/gf-dirent.h \
+ ../../../../libglusterfs/src/inode.h ../../../../libglusterfs/src/fd.h \
+ ../../../../libglusterfs/src/fd-lk.h \
+ ../../../../libglusterfs/src/xlator.h \
+ ../../../../libglusterfs/src/stack.h \
+ ../../../../libglusterfs/src/client_t.h \
+ ../../../../libglusterfs/src/timespec.h \
+ ../../../../libglusterfs/src/globals.h \
+ ../../../../libglusterfs/src/options.h \
+ ../../../../libglusterfs/src/logging.h \
+ ../../../../libglusterfs/src/defaults.h glupy.h \
+ ../../../../libglusterfs/src/mem-types.h
+
+/usr/include/stdc-predef.h:
+
+../../../../config.h:
+
+../../../../site.h:
+
+/usr/include/ctype.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/bits/byteswap-16.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/dlfcn.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stddef.h:
+
+/usr/include/bits/dlfcn.h:
+
+/usr/include/sys/uio.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/time.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/bits/uio.h:
+
+/usr/include/python2.7/Python.h:
+
+/usr/include/python2.7/patchlevel.h:
+
+/usr/include/python2.7/pyconfig.h:
+
+/usr/include/python2.7/pyconfig-64.h:
+
+/usr/include/python2.7/pymacconfig.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/limits.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/syslimits.h:
+
+/usr/include/limits.h:
+
+/usr/include/bits/posix1_lim.h:
+
+/usr/include/bits/local_lim.h:
+
+/usr/include/linux/limits.h:
+
+/usr/include/bits/posix2_lim.h:
+
+/usr/include/bits/xopen_lim.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/stdio.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stdarg.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/string.h:
+
+/usr/include/errno.h:
+
+/usr/include/bits/errno.h:
+
+/usr/include/linux/errno.h:
+
+/usr/include/asm/errno.h:
+
+/usr/include/asm-generic/errno.h:
+
+/usr/include/asm-generic/errno-base.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/alloca.h:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/include/unistd.h:
+
+/usr/include/bits/posix_opt.h:
+
+/usr/include/bits/environments.h:
+
+/usr/include/bits/confname.h:
+
+/usr/include/getopt.h:
+
+/usr/include/assert.h:
+
+/usr/include/python2.7/pyport.h:
+
+/usr/include/inttypes.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stdint.h:
+
+/usr/include/stdint.h:
+
+/usr/include/bits/wchar.h:
+
+/usr/include/math.h:
+
+/usr/include/bits/math-vector.h:
+
+/usr/include/bits/libm-simd-decl-stubs.h:
+
+/usr/include/bits/huge_val.h:
+
+/usr/include/bits/huge_valf.h:
+
+/usr/include/bits/huge_vall.h:
+
+/usr/include/bits/inf.h:
+
+/usr/include/bits/nan.h:
+
+/usr/include/bits/mathdef.h:
+
+/usr/include/bits/mathcalls.h:
+
+/usr/include/sys/time.h:
+
+/usr/include/bits/timex.h:
+
+/usr/include/sys/stat.h:
+
+/usr/include/bits/stat.h:
+
+/usr/include/python2.7/pymath.h:
+
+/usr/include/python2.7/pymem.h:
+
+/usr/include/python2.7/object.h:
+
+/usr/include/python2.7/objimpl.h:
+
+/usr/include/python2.7/pydebug.h:
+
+/usr/include/python2.7/unicodeobject.h:
+
+/usr/include/python2.7/intobject.h:
+
+/usr/include/python2.7/boolobject.h:
+
+/usr/include/python2.7/longobject.h:
+
+/usr/include/python2.7/floatobject.h:
+
+/usr/include/python2.7/complexobject.h:
+
+/usr/include/python2.7/rangeobject.h:
+
+/usr/include/python2.7/stringobject.h:
+
+/usr/include/python2.7/memoryobject.h:
+
+/usr/include/python2.7/bufferobject.h:
+
+/usr/include/python2.7/bytesobject.h:
+
+/usr/include/python2.7/bytearrayobject.h:
+
+/usr/include/python2.7/tupleobject.h:
+
+/usr/include/python2.7/listobject.h:
+
+/usr/include/python2.7/dictobject.h:
+
+/usr/include/python2.7/enumobject.h:
+
+/usr/include/python2.7/setobject.h:
+
+/usr/include/python2.7/methodobject.h:
+
+/usr/include/python2.7/moduleobject.h:
+
+/usr/include/python2.7/funcobject.h:
+
+/usr/include/python2.7/classobject.h:
+
+/usr/include/python2.7/fileobject.h:
+
+/usr/include/python2.7/cobject.h:
+
+/usr/include/python2.7/pycapsule.h:
+
+/usr/include/python2.7/traceback.h:
+
+/usr/include/python2.7/sliceobject.h:
+
+/usr/include/python2.7/cellobject.h:
+
+/usr/include/python2.7/iterobject.h:
+
+/usr/include/python2.7/genobject.h:
+
+/usr/include/python2.7/descrobject.h:
+
+/usr/include/python2.7/warnings.h:
+
+/usr/include/python2.7/weakrefobject.h:
+
+/usr/include/python2.7/codecs.h:
+
+/usr/include/python2.7/pyerrors.h:
+
+/usr/include/python2.7/pystate.h:
+
+/usr/include/python2.7/pyarena.h:
+
+/usr/include/python2.7/modsupport.h:
+
+/usr/include/python2.7/pythonrun.h:
+
+/usr/include/python2.7/ceval.h:
+
+/usr/include/python2.7/sysmodule.h:
+
+/usr/include/python2.7/intrcheck.h:
+
+/usr/include/python2.7/import.h:
+
+/usr/include/python2.7/abstract.h:
+
+/usr/include/python2.7/compile.h:
+
+/usr/include/python2.7/code.h:
+
+/usr/include/python2.7/eval.h:
+
+/usr/include/python2.7/pyctype.h:
+
+/usr/include/python2.7/pystrtod.h:
+
+/usr/include/python2.7/pystrcmp.h:
+
+/usr/include/python2.7/dtoa.h:
+
+/usr/include/python2.7/pyfpe.h:
+
+../../../../libglusterfs/src/glusterfs.h:
+
+/usr/include/netinet/in.h:
+
+/usr/include/sys/socket.h:
+
+/usr/include/bits/socket.h:
+
+/usr/include/bits/socket_type.h:
+
+/usr/include/bits/sockaddr.h:
+
+/usr/include/asm/socket.h:
+
+/usr/include/asm-generic/socket.h:
+
+/usr/include/asm/sockios.h:
+
+/usr/include/asm-generic/sockios.h:
+
+/usr/include/bits/in.h:
+
+/usr/include/sys/statvfs.h:
+
+/usr/include/bits/statvfs.h:
+
+/usr/include/netdb.h:
+
+/usr/include/rpc/netdb.h:
+
+/usr/include/bits/siginfo.h:
+
+/usr/include/bits/netdb.h:
+
+/usr/include/dirent.h:
+
+/usr/include/bits/dirent.h:
+
+/usr/include/fcntl.h:
+
+/usr/include/bits/fcntl.h:
+
+/usr/include/bits/fcntl-linux.h:
+
+/usr/include/arpa/inet.h:
+
+/usr/include/sys/poll.h:
+
+/usr/include/bits/poll.h:
+
+/usr/include/pthread.h:
+
+/usr/include/sched.h:
+
+/usr/include/bits/sched.h:
+
+/usr/include/bits/setjmp.h:
+
+/usr/include/openssl/sha.h:
+
+/usr/include/openssl/e_os2.h:
+
+/usr/include/openssl/opensslconf.h:
+
+/usr/include/openssl/opensslconf-x86_64.h:
+
+../../../../rpc/xdr/src/glusterfs-fops.h:
+
+/usr/include/rpc/rpc.h:
+
+/usr/include/rpc/types.h:
+
+/usr/include/sys/param.h:
+
+/usr/include/signal.h:
+
+/usr/include/bits/signum.h:
+
+/usr/include/bits/sigaction.h:
+
+/usr/include/bits/sigcontext.h:
+
+/usr/include/bits/sigstack.h:
+
+/usr/include/sys/ucontext.h:
+
+/usr/include/bits/sigthread.h:
+
+/usr/include/bits/param.h:
+
+/usr/include/linux/param.h:
+
+/usr/include/asm/param.h:
+
+/usr/include/asm-generic/param.h:
+
+/usr/include/rpc/xdr.h:
+
+/usr/include/rpc/auth.h:
+
+/usr/include/rpc/clnt.h:
+
+/usr/include/sys/un.h:
+
+/usr/include/rpc/rpc_msg.h:
+
+/usr/include/rpc/auth_unix.h:
+
+/usr/include/rpc/auth_des.h:
+
+/usr/include/rpc/svc.h:
+
+/usr/include/rpc/svc_auth.h:
+
+../../../../libglusterfs/src/compat.h:
+
+/usr/include/sys/xattr.h:
+
+/usr/include/linux/xattr.h:
+
+/usr/include/linux/libc-compat.h:
+
+/usr/include/linux/falloc.h:
+
+/usr/include/argp.h:
+
+../../../../libglusterfs/src/list.h:
+
+../../../../libglusterfs/src/locking.h:
+
+../../../../libglusterfs/src/logging.h:
+
+../../../../libglusterfs/src/lkowner.h:
+
+../../../../libglusterfs/src/compat-uuid.h:
+
+/usr/include/uuid/uuid.h:
+
+../../../../libglusterfs/src/refcount.h:
+
+../../../../libglusterfs/src/atomic.h:
+
+/usr/lib/gcc/x86_64-redhat-linux/6.4.1/include/stdbool.h:
+
+../../../../libglusterfs/src/xlator.h:
+
+../../../../libglusterfs/src/event-history.h:
+
+../../../../libglusterfs/src/mem-types.h:
+
+../../../../libglusterfs/src/circ-buff.h:
+
+../../../../libglusterfs/src/common-utils.h:
+
+/usr/include/openssl/md5.h:
+
+/usr/include/fnmatch.h:
+
+../../../../libglusterfs/src/glusterfs.h:
+
+../../../../libglusterfs/src/mem-pool.h:
+
+../../../../libglusterfs/src/iatt.h:
+
+../../../../libglusterfs/src/compat.h:
+
+../../../../libglusterfs/src/libglusterfs-messages.h:
+
+../../../../libglusterfs/src/glfs-message-id.h:
+
+../../../../libglusterfs/src/protocol-common.h:
+
+../../../../libglusterfs/src/iobuf.h:
+
+/usr/include/sys/mman.h:
+
+/usr/include/bits/mman.h:
+
+/usr/include/bits/mman-linux.h:
+
+../../../../libglusterfs/src/dict.h:
+
+../../../../libglusterfs/src/latency.h:
+
+../../../../libglusterfs/src/gf-dirent.h:
+
+../../../../libglusterfs/src/inode.h:
+
+../../../../libglusterfs/src/fd.h:
+
+../../../../libglusterfs/src/fd-lk.h:
+
+../../../../libglusterfs/src/xlator.h:
+
+../../../../libglusterfs/src/stack.h:
+
+../../../../libglusterfs/src/client_t.h:
+
+../../../../libglusterfs/src/timespec.h:
+
+../../../../libglusterfs/src/globals.h:
+
+../../../../libglusterfs/src/options.h:
+
+../../../../libglusterfs/src/logging.h:
+
+../../../../libglusterfs/src/defaults.h:
+
+glupy.h:
+
+../../../../libglusterfs/src/mem-types.h:

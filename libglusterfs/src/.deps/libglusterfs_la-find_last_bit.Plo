@@ -1,0 +1,9 @@
+libglusterfs_la-find_last_bit.lo: \
+ ../../contrib/timer-wheel/find_last_bit.c /usr/include/stdc-predef.h \
+ ../../config.h ../../site.h
+
+/usr/include/stdc-predef.h:
+
+../../config.h:
+
+../../site.h:

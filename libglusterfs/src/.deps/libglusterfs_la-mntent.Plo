@@ -1,0 +1,8 @@
+libglusterfs_la-mntent.lo: ../../contrib/mount/mntent.c \
+ /usr/include/stdc-predef.h ../../config.h ../../site.h
+
+/usr/include/stdc-predef.h:
+
+../../config.h:
+
+../../site.h:
