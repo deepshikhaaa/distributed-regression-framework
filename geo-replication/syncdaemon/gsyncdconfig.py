@@ -218,12 +218,12 @@ class Gconf(object):
                 self.default_values[k] = self.gconf.get(k, "")
                 self.gconf[k] = v.strip()
 
-        # Overwrite the Slave configurations which are sent as
-        # arguments to gsyncd slave
+        # Overwrite the Subordinate configurations which are sent as
+        # arguments to gsyncd subordinate
         if self.override_from_args:
             for k, v in self.args.items():
                 k = k.replace("_", "-")
-                if k.startswith("slave-") and k in self.gconf:
+                if k.startswith("subordinate-") and k in self.gconf:
                     self.gconf[k] = v
 
         self._tmpl_substitute()

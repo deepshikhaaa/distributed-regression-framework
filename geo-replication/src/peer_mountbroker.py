@@ -10,7 +10,7 @@ from gluster.cliutils import (execute, Cmd, node_output_ok,
                               runcli, oknotok)
 from prettytable import PrettyTable
 
-LOG_DIR = "/var/log/glusterfs/geo-replication-slaves"
+LOG_DIR = "/var/log/glusterfs/geo-replication-subordinates"
 GEOREP_DIR = "/var/lib/glusterd/geo-replication"
 GLUSTERD_VOLFILE = "/usr/local/etc/glusterfs/glusterd.vol"
 
@@ -142,9 +142,9 @@ class MountbrokerUserMgmt(object):
 class NodeSetup(Cmd):
     # Test if group exists using `getent group <grp>`
     # and then group add using `groupadd <grp>`
-    # chgrp -R <grp> /var/log/glusterfs/geo-replication-slaves
+    # chgrp -R <grp> /var/log/glusterfs/geo-replication-subordinates
     # chgrp -R <grp> /var/lib/glusterd/geo-replication
-    # chmod -R 770 /var/log/glusterfs/geo-replication-slaves
+    # chmod -R 770 /var/log/glusterfs/geo-replication-subordinates
     # chmod -R 770 /var/lib/glusterd/geo-replication
     # mkdir -p <mnt_root>
     # chmod 0711 <mnt_root>
@@ -237,7 +237,7 @@ class CliSetup(Cmd):
 class NodeStatus(Cmd):
     # Check if Group exists
     # Check if user exists
-    # Check directory permission /var/log/glusterfs/geo-replication-slaves
+    # Check directory permission /var/log/glusterfs/geo-replication-subordinates
     # and /var/lib/glusterd/geo-replication
     # Check mount root and its permissions
     # Check glusterd.vol file for user, group, dir existance

@@ -77,8 +77,8 @@ class Monitor(object):
         # give a chance to graceful exit
         errno_wrap(os.kill, [-os.getpid(), signal.SIGTERM], [ESRCH])
 
-    def monitor(self, w, argv, cpids, agents, slave_vol, slave_host, master,
-                suuid, slavenodes):
+    def monitor(self, w, argv, cpids, agents, subordinate_vol, subordinate_host, main,
+                suuid, subordinatenodes):
         """the monitor loop
 
         Basic logic is a blantantly simple blunt heuristics:
@@ -102,9 +102,9 @@ class Monitor(object):
                                                     w[0]['host'],
                                                     w[0]['dir'],
                                                     w[0]['uuid'],
-                                                    master,
-                                                    "%s::%s" % (slave_host,
-                                                                slave_vol))
+                                                    main,
+                                                    "%s::%s" % (subordinate_host,
+                                                                subordinate_vol))
 
         set_monitor_status(gconf.get("state-file"), self.ST_STARTED)
         self.status[w[0]['dir']].set_worker_status(self.ST_INIT)
@@ -138,15 +138,15 @@ class Monitor(object):
         while ret in (0, 1):
             remote_user, remote_host = w[1][0].split("@")
             remote_id = w[1][1]
-            # Check the status of the connected slave node
-            # If the connected slave node is down then try to connect to
+            # Check the status of the connected subordinate node
+            # If the connected subordinate node is down then try to connect to
             # different up node.
-            current_slave_host = remote_host
-            slave_up_hosts = get_up_nodes(slavenodes, gconf.get("ssh-port"))
+            current_subordinate_host = remote_host
+            subordinate_up_hosts = get_up_nodes(subordinatenodes, gconf.get("ssh-port"))
 
-            if (current_slave_host, remote_id) not in slave_up_hosts:
-                if len(slave_up_hosts) > 0:
-                    remote_new = random.choice(slave_up_hosts)
+            if (current_subordinate_host, remote_id) not in subordinate_up_hosts:
+                if len(subordinate_up_hosts) > 0:
+                    remote_new = random.choice(subordinate_up_hosts)
                     remote_host = "%s@%s" % (remote_user, remote_new[0])
                     remote_id = remote_new[1]
 
@@ -155,7 +155,7 @@ class Monitor(object):
 
             logging.info(lf('starting gsyncd worker',
                             brick=w[0]['dir'],
-                            slave_node=remote_host))
+                            subordinate_node=remote_host))
 
             # Couple of pipe pairs for RPC communication b/w
             # worker and changelog agent.
@@ -172,12 +172,12 @@ class Monitor(object):
                 os.close(ww)
                 args_to_agent = argv + [
                     'agent',
-                    rconf.args.master,
-                    rconf.args.slave,
+                    rconf.args.main,
+                    rconf.args.subordinate,
                     '--local-path', w[0]['dir'],
                     '--local-node', w[0]['host'],
                     '--local-node-id', w[0]['uuid'],
-                    '--slave-id', suuid,
+                    '--subordinate-id', suuid,
                     '--rpc-fd', ','.join([str(ra), str(wa), str(rw), str(ww)])
                 ]
 
@@ -198,13 +198,13 @@ class Monitor(object):
 
                 args_to_worker = argv + [
                     'worker',
-                    rconf.args.master,
-                    rconf.args.slave,
+                    rconf.args.main,
+                    rconf.args.subordinate,
                     '--feedback-fd', str(pw),
                     '--local-path', w[0]['dir'],
                     '--local-node', w[0]['host'],
                     '--local-node-id', w[0]['uuid'],
-                    '--slave-id', suuid,
+                    '--subordinate-id', suuid,
                     '--rpc-fd',
                     ','.join([str(rw), str(ww), str(ra), str(wa)]),
                     '--subvol-num', str(w[2]),
@@ -295,11 +295,11 @@ class Monitor(object):
             else:
                 logging.info(
                     lf("Worker not confirmed after wait, aborting it. "
-                       "Gsyncd invocation on remote slave via SSH or "
-                       "gluster master mount might have hung. Please "
+                       "Gsyncd invocation on remote subordinate via SSH or "
+                       "gluster main mount might have hung. Please "
                        "check the above logs for exact issue and check "
-                       "master or slave volume for errors. Restarting "
-                       "master/slave volume accordingly might help.",
+                       "main or subordinate volume for errors. Restarting "
+                       "main/subordinate volume accordingly might help.",
                        brick=w[0]['dir'],
                        timeout=conn_timeout))
                 errno_wrap(os.kill, [cpid, signal.SIGKILL], [ESRCH])
@@ -317,18 +317,18 @@ class Monitor(object):
                 if ret in (0, 1):
                     self.status[w[0]['dir']].set_worker_status(self.ST_FAULTY)
                     gf_event(EVENT_GEOREP_FAULTY,
-                             master_volume=master.volume,
-                             master_node=w[0]['host'],
-                             master_node_id=w[0]['uuid'],
-                             slave_host=slave_host,
-                             slave_volume=slave_vol,
-                             current_slave_host=current_slave_host,
+                             main_volume=main.volume,
+                             main_node=w[0]['host'],
+                             main_node_id=w[0]['uuid'],
+                             subordinate_host=subordinate_host,
+                             subordinate_volume=subordinate_vol,
+                             current_subordinate_host=current_subordinate_host,
                              brick_path=w[0]['dir'])
             time.sleep(10)
         self.status[w[0]['dir']].set_worker_status(self.ST_INCON)
         return ret
 
-    def multiplex(self, wspx, suuid, slave_vol, slave_host, master, slavenodes):
+    def multiplex(self, wspx, suuid, subordinate_vol, subordinate_host, main, subordinatenodes):
         argv = [os.path.basename(sys.executable), sys.argv[0]]
 
         cpids = set()
@@ -336,8 +336,8 @@ class Monitor(object):
         ta = []
         for wx in wspx:
             def wmon(w):
-                cpid, _ = self.monitor(w, argv, cpids, agents, slave_vol,
-                                       slave_host, master, suuid, slavenodes)
+                cpid, _ = self.monitor(w, argv, cpids, agents, subordinate_vol,
+                                       subordinate_host, main, suuid, subordinatenodes)
                 time.sleep(1)
                 self.lock.acquire()
                 for cpid in cpids:
@@ -353,32 +353,32 @@ class Monitor(object):
             t.join()
 
 
-def distribute(master, slave):
+def distribute(main, subordinate):
     if rconf.args.use_gconf_volinfo:
-        mvol = VolinfoFromGconf(master.volume, master=True)
+        mvol = VolinfoFromGconf(main.volume, main=True)
     else:
-        mvol = Volinfo(master.volume, master.host)
-    logging.debug('master bricks: ' + repr(mvol.bricks))
+        mvol = Volinfo(main.volume, main.host)
+    logging.debug('main bricks: ' + repr(mvol.bricks))
     prelude = []
-    slave_host = None
-    slave_vol = None
+    subordinate_host = None
+    subordinate_vol = None
 
     prelude = [gconf.get("ssh-command")] + \
         gconf.get("ssh-options").split() + \
         ["-p", str(gconf.get("ssh-port"))] + \
-        [slave.remote_addr]
+        [subordinate.remote_addr]
 
-    logging.debug('slave SSH gateway: ' + slave.remote_addr)
+    logging.debug('subordinate SSH gateway: ' + subordinate.remote_addr)
 
     if rconf.args.use_gconf_volinfo:
-        svol = VolinfoFromGconf(slave.volume, master=False)
+        svol = VolinfoFromGconf(subordinate.volume, main=False)
     else:
-        svol = Volinfo(slave.volume, "localhost", prelude)
+        svol = Volinfo(subordinate.volume, "localhost", prelude)
 
     sbricks = svol.bricks
     suuid = svol.uuid
-    slave_host = slave.remote_addr.split('@')[-1]
-    slave_vol = slave.volume
+    subordinate_host = subordinate.remote_addr.split('@')[-1]
+    subordinate_vol = subordinate.volume
 
     # save this xattr for the session delete command
     old_stime_xattr_prefix = gconf.get("stime-xattr-prefix", None)
@@ -388,22 +388,22 @@ def distribute(master, slave):
        old_stime_xattr_prefix != new_stime_xattr_prefix:
         gconf.setconfig("stime-xattr-prefix", new_stime_xattr_prefix)
 
-    logging.debug('slave bricks: ' + repr(sbricks))
+    logging.debug('subordinate bricks: ' + repr(sbricks))
 
-    slavenodes = set((b['host'], b["uuid"]) for b in sbricks)
-    rap = SSH.parse_ssh_address(slave)
-    slaves = [(rap['user'] + '@' + h[0], h[1]) for h in slavenodes]
+    subordinatenodes = set((b['host'], b["uuid"]) for b in sbricks)
+    rap = SSH.parse_ssh_address(subordinate)
+    subordinates = [(rap['user'] + '@' + h[0], h[1]) for h in subordinatenodes]
 
     workerspex = []
     for idx, brick in enumerate(mvol.bricks):
         if rconf.args.local_node_id == brick['uuid']:
             is_hot = mvol.is_hot(":".join([brick['host'], brick['dir']]))
             workerspex.append((brick,
-                               slaves[idx % len(slaves)],
+                               subordinates[idx % len(subordinates)],
                                get_subvol_num(idx, mvol, is_hot),
                                is_hot))
     logging.debug('worker specs: ' + repr(workerspex))
-    return workerspex, suuid, slave_vol, slave_host, master, slavenodes
+    return workerspex, suuid, subordinate_vol, subordinate_host, main, subordinatenodes
 
 
 def monitor(local, remote):

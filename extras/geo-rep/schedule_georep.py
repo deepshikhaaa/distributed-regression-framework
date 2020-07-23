@@ -169,14 +169,14 @@ def get_bricks(volname):
     return value
 
 
-def get_georep_status(mastervol, slave):
+def get_georep_status(mainvol, subordinate):
     session_keys = set()
     out = {}
     cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication"]
-    if mastervol is not None:
-        cmd += [mastervol]
-        if slave:
-            cmd += [slave]
+    if mainvol is not None:
+        cmd += [mainvol]
+        if subordinate:
+            cmd += [subordinate]
 
     cmd += ["status", "--xml"]
     info = execute(cmd)
@@ -186,30 +186,30 @@ def get_georep_status(mastervol, slave):
         # Get All Sessions
         for volume_el in tree.findall("geoRep/volume"):
             sessions_el = volume_el.find("sessions")
-            # Master Volume name if multiple Volumes
+            # Main Volume name if multiple Volumes
             mvol = volume_el.find("name").text
 
             # For each session, collect the details
             for session in sessions_el.findall("session"):
-                session_slave = "{0}:{1}".format(mvol, session.find(
-                    "session_slave").text)
-                session_keys.add(session_slave)
-                out[session_slave] = {}
+                session_subordinate = "{0}:{1}".format(mvol, session.find(
+                    "session_subordinate").text)
+                session_keys.add(session_subordinate)
+                out[session_subordinate] = {}
 
                 for pair in session.findall('pair'):
-                    master_brick = "{0}:{1}".format(
-                        pair.find("master_node").text,
-                        pair.find("master_brick").text
+                    main_brick = "{0}:{1}".format(
+                        pair.find("main_node").text,
+                        pair.find("main_brick").text
                     )
 
-                    out[session_slave][master_brick] = {
-                        "mastervol": mvol,
-                        "slavevol": pair.find("slave").text.split("::")[-1],
-                        "master_node": pair.find("master_node").text,
-                        "master_brick": pair.find("master_brick").text,
-                        "slave_user": pair.find("slave_user").text,
-                        "slave": pair.find("slave").text,
-                        "slave_node": pair.find("slave_node").text,
+                    out[session_subordinate][main_brick] = {
+                        "mainvol": mvol,
+                        "subordinatevol": pair.find("subordinate").text.split("::")[-1],
+                        "main_node": pair.find("main_node").text,
+                        "main_brick": pair.find("main_brick").text,
+                        "subordinate_user": pair.find("subordinate_user").text,
+                        "subordinate": pair.find("subordinate").text,
+                        "subordinate_node": pair.find("subordinate_node").text,
                         "status": pair.find("status").text,
                         "crawl_status": pair.find("crawl_status").text,
                         "entry": pair.find("entry").text,
@@ -218,7 +218,7 @@ def get_georep_status(mastervol, slave):
                         "failures": pair.find("failures").text,
                         "checkpoint_completed": pair.find(
                             "checkpoint_completed").text,
-                        "master_node_uuid": pair.find("master_node_uuid").text,
+                        "main_node_uuid": pair.find("main_node_uuid").text,
                         "last_synced": pair.find("last_synced").text,
                         "checkpoint_time": pair.find("checkpoint_time").text,
                         "checkpoint_completion_time":
@@ -230,21 +230,21 @@ def get_georep_status(mastervol, slave):
     return session_keys, out
 
 
-def get_offline_status(volname, brick, node_uuid, slave):
+def get_offline_status(volname, brick, node_uuid, subordinate):
     node, brick = brick.split(":")
-    if "@" not in slave:
-        slave_user = "root"
+    if "@" not in subordinate:
+        subordinate_user = "root"
     else:
-        slave_user, _ = slave.split("@")
+        subordinate_user, _ = subordinate.split("@")
 
     return {
-        "mastervol": volname,
-        "slavevol": slave.split("::")[-1],
-        "master_node": node,
-        "master_brick": brick,
-        "slave_user": slave_user,
-        "slave": slave,
-        "slave_node": "N/A",
+        "mainvol": volname,
+        "subordinatevol": subordinate.split("::")[-1],
+        "main_node": node,
+        "main_brick": brick,
+        "subordinate_user": subordinate_user,
+        "subordinate": subordinate,
+        "subordinate_node": "N/A",
         "status": "Offline",
         "crawl_status": "N/A",
         "entry": "N/A",
@@ -252,44 +252,44 @@ def get_offline_status(volname, brick, node_uuid, slave):
         "meta": "N/A",
         "failures": "N/A",
         "checkpoint_completed": "N/A",
-        "master_node_uuid": node_uuid,
+        "main_node_uuid": node_uuid,
         "last_synced": "N/A",
         "checkpoint_time": "N/A",
         "checkpoint_completion_time": "N/A"
     }
 
 
-def get(mastervol=None, slave=None):
+def get(mainvol=None, subordinate=None):
     """
-    This function gets list of Bricks of Master Volume and collects
+    This function gets list of Bricks of Main Volume and collects
     respective Geo-rep status. Output will be always ordered as the
-    bricks list in Master Volume. If Geo-rep status is not available
+    bricks list in Main Volume. If Geo-rep status is not available
     for any brick then it updates OFFLINE status.
     """
     out = []
-    session_keys, gstatus = get_georep_status(mastervol, slave)
+    session_keys, gstatus = get_georep_status(mainvol, subordinate)
 
     for session in session_keys:
-        mvol, _, slave = session.split(":", 2)
-        slave = slave.replace("ssh://", "")
-        master_bricks = get_bricks(mvol)
+        mvol, _, subordinate = session.split(":", 2)
+        subordinate = subordinate.replace("ssh://", "")
+        main_bricks = get_bricks(mvol)
         out.append([])
-        for brick in master_bricks:
+        for brick in main_bricks:
             bname = brick["name"]
             if gstatus.get(session) and gstatus[session].get(bname, None):
                 out[-1].append(gstatus[session][bname])
             else:
                 out[-1].append(
-                    get_offline_status(mvol, bname, brick["hostUuid"], slave))
+                    get_offline_status(mvol, bname, brick["hostUuid"], subordinate))
 
     return out
 
 
-def get_summary(mastervol, slave_url):
+def get_summary(mainvol, subordinate_url):
     """
     Wrapper function around Geo-rep Status and Gluster Volume Info
     This combines the output from Bricks list and Geo-rep Status.
-    If a Master Brick node is down or Status is faulty then increments
+    If a Main Brick node is down or Status is faulty then increments
     the faulty counter. It also collects the checkpoint status from all
     workers and compares with Number of Bricks.
     """
@@ -297,7 +297,7 @@ def get_summary(mastervol, slave_url):
     faulty_rows = []
     out = []
 
-    status_data = get(mastervol, slave_url)
+    status_data = get(mainvol, subordinate_url)
 
     for session in status_data:
         session_name = ""
@@ -324,17 +324,17 @@ def get_summary(mastervol, slave_url):
                 summary["completed_checkpoints"] += 1
 
             session_name = "{0}=>{1}".format(
-                row["mastervol"],
-                row["slave"].replace("ssh://", "")
+                row["mainvol"],
+                row["subordinate"].replace("ssh://", "")
             )
 
             if row["status"] == "Faulty":
-                faulty_rows.append("{0}:{1}".format(row["master_node"],
-                                                    row["master_brick"]))
+                faulty_rows.append("{0}:{1}".format(row["main_node"],
+                                                    row["main_brick"]))
 
             if row["status"] == "Offline":
-                down_rows.append("{0}:{1}".format(row["master_node"],
-                                                  row["master_brick"]))
+                down_rows.append("{0}:{1}".format(row["main_node"],
+                                                  row["main_brick"]))
 
         if summary["active"] == summary["completed_checkpoints"] and \
            summary["faulty"] == 0 and summary["offline"] == 0:
@@ -349,12 +349,12 @@ def get_summary(mastervol, slave_url):
     return out
 
 
-def touch_mount_root(mastervol):
+def touch_mount_root(mainvol):
     # Create a Mount and Touch the Mount point root,
     # Hack to make sure some event available after
     # setting Checkpoint. Without this their is a chance of
     # Checkpoint never completes.
-    with glustermount("localhost", mastervol) as mnt:
+    with glustermount("localhost", mainvol) as mnt:
         execute(["touch", mnt])
 
 
@@ -362,21 +362,21 @@ def main(args):
     turns = 1
 
     # Stop Force
-    cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication", args.mastervol,
-           "%s::%s" % (args.slave, args.slavevol), "stop", "force"]
+    cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication", args.mainvol,
+           "%s::%s" % (args.subordinate, args.subordinatevol), "stop", "force"]
     execute(cmd)
     output_ok("Stopped Geo-replication")
 
     # Set Checkpoint to NOW
-    cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication", args.mastervol,
-           "%s::%s" % (args.slave, args.slavevol), "config", "checkpoint",
+    cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication", args.mainvol,
+           "%s::%s" % (args.subordinate, args.subordinatevol), "config", "checkpoint",
            "now"]
     execute(cmd)
     output_ok("Set Checkpoint")
 
     # Start the Geo-replication
-    cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication", args.mastervol,
-           "%s::%s" % (args.slave, args.slavevol), "start"]
+    cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication", args.mainvol,
+           "%s::%s" % (args.subordinate, args.subordinatevol), "start"]
     execute(cmd)
     output_ok("Started Geo-replication and watching Status for "
               "Checkpoint completion")
@@ -387,16 +387,16 @@ def main(args):
     # Sleep till Geo-rep initializes
     time.sleep(60)
 
-    touch_mount_root(args.mastervol)
+    touch_mount_root(args.mainvol)
 
-    slave_url = "{0}::{1}".format(args.slave, args.slavevol)
+    subordinate_url = "{0}::{1}".format(args.subordinate, args.subordinatevol)
 
     # Loop to Check the Geo-replication Status and Checkpoint
     # If All Status OK and all Checkpoints complete,
     # Stop the Geo-replication and Log the Completeness
     while True:
-        session_summary = get_summary(args.mastervol,
-                                      slave_url)
+        session_summary = get_summary(args.mainvol,
+                                      subordinate_url)
         if len(session_summary) == 0:
             # If Status command fails with another transaction error
             # or any other error. Gluster cmd still produces XML output
@@ -425,8 +425,8 @@ def main(args):
             if summary["checkpoints_ok"]:
                 output_ok("Stopping Geo-replication session now")
                 cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication",
-                       args.mastervol,
-                       "%s::%s" % (args.slave, args.slavevol), "stop"]
+                       args.mainvol,
+                       "%s::%s" % (args.subordinate, args.subordinatevol), "stop"]
                 execute(cmd)
                 break
             else:
@@ -434,15 +434,15 @@ def main(args):
                 # was down and came online now. SETATTR on mount is not
                 # recorded, So again issue touch on mount root So that
                 # Stime will increase and Checkpoint will complete.
-                touch_mount_root(args.mastervol)
+                touch_mount_root(args.mainvol)
 
         # Increment the turns and Sleep for 10 sec
         turns += 1
         duration = int(time.time()) - start_time
         if args.timeout > 0 and duration > (args.timeout * 60):
             cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication",
-                   args.mastervol,
-                   "%s::%s" % (args.slave, args.slavevol), "stop", "force"]
+                   args.mainvol,
+                   "%s::%s" % (args.subordinate, args.subordinatevol), "stop", "force"]
             execute(cmd)
             output_notok("Timed out, Stopping Geo-replication("
                          "Duration: {0}sec)".format(duration))
@@ -457,12 +457,12 @@ def main(args):
 if __name__ == "__main__":
     parser = ArgumentParser(formatter_class=RawDescriptionHelpFormatter,
                             description=__doc__)
-    parser.add_argument("mastervol", help="Master Volume Name")
-    parser.add_argument("slave",
+    parser.add_argument("mainvol", help="Main Volume Name")
+    parser.add_argument("subordinate",
                         help="SLAVEHOST or root@SLAVEHOST "
                         "or user@SLAVEHOST",
                         metavar="SLAVE")
-    parser.add_argument("slavevol", help="Slave Volume Name")
+    parser.add_argument("subordinatevol", help="Subordinate Volume Name")
     parser.add_argument("--interval", help="Interval in Seconds. "
                         "Wait time before each status check",
                         type=int, default=10)
@@ -478,7 +478,7 @@ if __name__ == "__main__":
     try:
         # Check for session existence
         cmd = ["/usr/local/sbin/gluster", "volume", "geo-replication",
-               args.mastervol, "%s::%s" % (args.slave, args.slavevol), "status"]
+               args.mainvol, "%s::%s" % (args.subordinate, args.subordinatevol), "status"]
         execute(cmd)
         main(args)
     except KeyboardInterrupt:
